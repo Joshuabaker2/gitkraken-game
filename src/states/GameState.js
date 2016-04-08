@@ -16,7 +16,7 @@ class GameState extends Phaser.State {
 	}
 
 	update() {
-		player.handleKeyboard();
+		// player.handleKeyboard();
 //    _handleCollisions();
 // 	player.handleMomentum();
 //    handleKeyboard();

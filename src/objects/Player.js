@@ -21,7 +21,13 @@ class Player extends Phaser.Sprite {
 //    player.animations.add('right', [5, 6, 7, 8], 10, true);
     }
 
-    static handleMomentum () {
+    update () {
+        // gets called automatically by World.update()
+        this.handleMomentum();
+        this.handleKeyboard();
+    }
+
+    handleMomentum () {
         if (this.body.velocity.x > 0) {
             this.body.velocity.x -= 2;
         } else if (this.body.velocity.x < 0) {
@@ -35,14 +41,14 @@ class Player extends Phaser.Sprite {
         }
     }
 
-    static handleKeyboard () {
+    handleKeyboard () {
 
         if (this.cursors.left.isDown) {
             this.body.velocity.x -= 4;
-            //        this.animations.play('left');
+            // this.animations.play('left');
         } else if (this.cursors.right.isDown) {
             this.body.velocity.x += 4;
-            //        this.animations.play('right');
+            // this.animations.play('right');
         }
 
         if (this.cursors.up.isDown) {
