@@ -1,10 +1,11 @@
-// import RainbowText from 'objects/RainbowText';
 import Player from 'objects/Player';
+import WindowManager from 'objects/WindowManager';
 
 class GameState extends Phaser.State {
 
 	preload() {
 		this.game.load.image('kraken', './assets/kraken.png');
+		new WindowManager(this.game, "100%", "100%");
 	}
 
 	create() {
@@ -16,6 +17,7 @@ class GameState extends Phaser.State {
 	update() {
 
 	}
+
 
 }
 
