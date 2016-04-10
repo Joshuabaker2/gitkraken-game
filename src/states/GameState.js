@@ -14,9 +14,9 @@ class GameState extends Phaser.State {
 
 	create() {
 		this.collisionManager = new CollisionManager(this.game);
-		this.generatePlayer();
 		this.generateFood();
 		this.generateFish();
+		this.generatePlayer();
 	}
 
 	update() {

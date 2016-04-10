@@ -61,11 +61,11 @@ class Player extends Phaser.Sprite {
     }
 
     /**
-     * Grow by the half the size of the sprite eaten
+     * Grow by a quarter the size of the sprite eaten
      * @param eaten
      */
     growBy (eaten) {
-        this.size = this.size + eaten/2;
+        this.size = this.size + eaten/4;
         this.scale.setTo(this.size, this.size);
     }
 }
