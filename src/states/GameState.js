@@ -27,11 +27,11 @@ class GameState extends Phaser.State {
 	loadAssets() {
 		this.game.load.image('kraken', './assets/kraken.png');
 		this.game.load.image('bubble', './assets/bubble.png');
-		this.game.load.image('fish', './assets/fish.png');
+		this.game.load.image('roundfish', './assets/roundfish.png');
 	}
 
 	generateFood() {
-		for (let i = 0; i < 1; i++ ) {
+		for (let i = 0; i < 10; i++ ) {
 			const food = new Food(this.game);
 			this.game.add.existing(food);
 			this.collisionManager.addCollidable(food);

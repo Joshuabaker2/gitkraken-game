@@ -7,7 +7,7 @@ class Player extends Phaser.Sprite {
     constructor(game, x, y) {
         super(game, x, y, 'kraken');
         this.size = 0.02;
-        this.scale.setTo(0.02, 0.02);
+        this.scale.setTo(this.size, this.size);
         this.cursors = game.input.keyboard.createCursorKeys();
         this.anchor.setTo(0.5, 0.5);
 
@@ -61,11 +61,11 @@ class Player extends Phaser.Sprite {
     }
 
     /**
-     * Grow by the size of the sprite eaten
+     * Grow by the half the size of the sprite eaten
      * @param eaten
      */
     growBy (eaten) {
-        this.size = this.size + eaten;
+        this.size = this.size + eaten/2;
         this.scale.setTo(this.size, this.size);
     }
 }
