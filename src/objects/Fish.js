@@ -9,6 +9,8 @@ class Fish extends Collidable {
     constructor(game) {
         const sizeModifier =  Math.floor(Math.random() * (21) - 3)/1000;
         super(game, 'roundfish', 0.0225 + sizeModifier);
+        this.goingLeft = sizeModifier % 2 === 1;
+        this.maxVelocity = Math.floor(Math.random() * (84) - 45)
     }
 
     update () {
@@ -29,20 +31,25 @@ class Fish extends Collidable {
     swimAround () {
         if (!this.body) return;
 
-        if (this.body.velocity.x > 150) {
-            this.body.acceleration.x -= 5;
-        } else if (this.body.velocity.x < -150) {
-            this.body.acceleration.x += 5;
+        if (this.body.velocity.x > this.maxVelocity) {
+            this.goingLeft = true;
+        } else if (this.body.velocity.x < -this.maxVelocity) {
+            this.goingLeft = false;
         }
 
-        if (this.body.velocity.y > 150) {
+        if (this.body.velocity.y > 50) {
             this.body.acceleration.y -= 5;
-        } else if (this.body.velocity.y < -150) {
+        } else if (this.body.velocity.y < -50) {
             this.body.acceleration.y += 5;
         }
 
-        this.body.acceleration.x += Math.floor(Math.random() * (7) - 3);
-        this.body.acceleration.y += Math.floor(Math.random() * (7) - 3);
+        if (this.goingLeft) {
+            this.body.acceleration.x -= 1;
+        } else {
+            this.body.acceleration.x += 1;
+        }
+
+        this.body.acceleration.y += Math.floor(Math.random() * (3) - 1);
     }
 
 }
