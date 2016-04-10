@@ -25,15 +25,15 @@ class Player extends Phaser.Sprite {
 
     handleMomentum () {
         if (this.body.velocity.x > 0) {
-            this.body.velocity.x -= 2;
+            this.body.velocity.x -= 4;
         } else if (this.body.velocity.x < 0) {
-            this.body.velocity.x += 2;
+            this.body.velocity.x += 4;
         }
 
         if (this.body.velocity.y > 0) {
-            this.body.velocity.y -= 2;
+            this.body.velocity.y -= 4;
         } else if (this.body.velocity.y < 0) {
-            this.body.velocity.y += 2;
+            this.body.velocity.y += 4;
         }
 
         this.body.acceleration = 0;
@@ -41,20 +41,20 @@ class Player extends Phaser.Sprite {
 
     handleKeyboard () {
         if (this.cursors.left.isDown) {
-            this.body.angularVelocity = this.body.angularVelocity > -200 ? this.body.angularVelocity - 4 : this.body.angularVelocity;
+            this.body.angularVelocity = this.body.angularVelocity > -200 ? this.body.angularVelocity - 8 : this.body.angularVelocity;
         } else if (this.cursors.right.isDown) {
-            this.body.angularVelocity = this.body.angularVelocity < 200 ? this.body.angularVelocity + 4 : this.body.angularVelocity;
+            this.body.angularVelocity = this.body.angularVelocity < 200 ? this.body.angularVelocity + 8 : this.body.angularVelocity;
         } else {
             this.body.angularVelocity = 0;
         }
 
 
         if (this.cursors.up.isDown) {
-            const tempVelocity = this.game.physics.arcade.velocityFromAngle(this.angle + 90, 4);
+            const tempVelocity = this.game.physics.arcade.velocityFromAngle(this.angle + 90, 8);
             this.body.velocity.x += tempVelocity.x;
             this.body.velocity.y += tempVelocity.y;
         } else if (this.cursors.down.isDown) {
-            const tempVelocity = this.game.physics.arcade.velocityFromAngle(this.angle + 90, 2);
+            const tempVelocity = this.game.physics.arcade.velocityFromAngle(this.angle + 90, 5);
             this.body.velocity.x -= tempVelocity.x;
             this.body.velocity.y -= tempVelocity.y;
         }

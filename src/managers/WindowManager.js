@@ -8,6 +8,7 @@ class WindowManager extends Phaser.ScaleManager {
         super(game, width, height);
         this.manageWindow();
         this.sprites = [];
+        this.respawnSprites = [];
     }
 
     manageWindow() {
@@ -19,6 +20,7 @@ class WindowManager extends Phaser.ScaleManager {
     
     update() {
         this.screenWrap();
+        this.respawnScreenWrap();
     }
 
     adjust() {
@@ -27,6 +29,22 @@ class WindowManager extends Phaser.ScaleManager {
     
     addSprite (sprite) {
         this.sprites.push(sprite);        
+    }
+    
+    addRespawnSprite (sprite) {
+            this.respawnSprites.push(sprite);
+    }
+
+    /**
+     * When a sprite leaves the screen, call their respawn function instead at the edge of the map.
+     */
+    respawnScreenWrap () {
+        this.respawnSprites.forEach((sprite) => {
+            if (!sprite.body) return;
+            if (sprite.x < 0 || sprite.x > this.game.width) {
+                sprite.respawn(0, null, 200, 1, 0);
+            }
+        });
     }
 
     screenWrap () {

@@ -4,8 +4,8 @@
 
 class Fish extends Phaser.Sprite {
 
-    constructor(game, sprite, size, maxSizeModifier) {
-        super(game, game.world.randomX, game.world.randomY, sprite);
+    constructor(game, sprite, size, maxSizeModifier, x, y) {
+        super(game, x || game.world.randomX, y || game.world.randomY, sprite);
         this.maxSizeModifier = maxSizeModifier;
         this.size = size + this.sizeModifier();
 
@@ -16,26 +16,27 @@ class Fish extends Phaser.Sprite {
 
 
 
-    respawn () {
+    respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000, max, min) {
         const savedBody = this.body;
+        const newSize = this.size + this.sizeModifier(max, min);
         this.body = null;
         this.visible = false;
 
         setTimeout(() => {
-            this.scale.setTo(this.size + this.sizeModifier(), this.size + this.sizeModifier());
+            this.scale.setTo(newSize, newSize);
             this.body = savedBody;
-            this.body.x = this.game.world.randomX;
-            this.body.y = this.game.world.randomY;
+            this.body.x = x;
+            this.body.y = y;
             this.body.acceleration.x = 0;
             this.body.acceleration.y = 0;
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;
             this.visible = true;
-        }, 5000);
+        }, timeout);
     }
 
-    sizeModifier() {
-        return Math.floor(Math.random() * (this.maxSizeModifier))/1000;
+    sizeModifier(max = this.maxSizeModifier, min = 0) {
+        return Math.floor(Math.random() * (max - min) + min)/1000;
     }
 
 }
