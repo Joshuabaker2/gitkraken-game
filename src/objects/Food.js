@@ -7,7 +7,7 @@ import Collidable from 'objects/Collidable';
 class Food extends Collidable {
 
     constructor(game) {
-        super(game, 'bubble', 0.005);
+        super(game, 'bubble', 0.005, 0);
     }
 
     update () {

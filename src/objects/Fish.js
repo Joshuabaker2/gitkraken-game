@@ -7,10 +7,11 @@ import Collidable from 'objects/Collidable';
 class Fish extends Collidable {
 
     constructor(game) {
-        const sizeModifier =  Math.floor(Math.random() * (21) - 3)/1000;
-        super(game, 'roundfish', 0.0225 + sizeModifier);
-        this.goingLeft = sizeModifier % 2 === 1;
-        this.maxVelocity = Math.floor(Math.random() * (84) - 45)
+        super(game, 'roundfish', 0.0225, 30);
+        
+        this.maxVelocity = Math.floor(Math.random() * (84));
+        this.goingLeft = this.maxVelocity % 2 === 1;
+
     }
 
     update () {
@@ -18,7 +19,7 @@ class Fish extends Collidable {
         this.swimAround();
         this.chooseDirection();
     }
-
+    
     chooseDirection() {
         if (!this.body) return;
         if (this.body.velocity.x > 0) {
