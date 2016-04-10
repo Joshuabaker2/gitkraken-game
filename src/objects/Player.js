@@ -6,12 +6,13 @@ class Player extends Phaser.Sprite {
 
     constructor(game, x, y) {
         super(game, x, y, 'kraken');
-        this.scale.setTo(0.01, 0.01);
+        this.size = 0.02;
+        this.scale.setTo(0.02, 0.02);
         this.cursors = game.input.keyboard.createCursorKeys();
         this.anchor.setTo(0.5, 0.5);
 
         //  We need to enable physics on the player
-        game.physics.arcade.enable(this);
+        game.physics.enable(this, Phaser.Physics.ARCADE);
 
         //  Player physics properties.
         this.body.collideWorldBounds = true;
@@ -42,15 +43,9 @@ class Player extends Phaser.Sprite {
         }
 
         this.body.acceleration = 0;
-
-
-
     }
 
     handleKeyboard () {
-
-
-
         if (this.cursors.left.isDown) {
             this.body.angularVelocity = this.body.angularVelocity > -200 ? this.body.angularVelocity - 4 : this.body.angularVelocity;
         } else if (this.cursors.right.isDown) {
@@ -65,11 +60,20 @@ class Player extends Phaser.Sprite {
             this.body.velocity.x += tempVelocity.x;
             this.body.velocity.y += tempVelocity.y;
         } else if (this.cursors.down.isDown) {
-            this.game.physics.arcade.velocityFromAngle(this.angle + 90, -15, this.body.velocity);
+            const tempVelocity = this.game.physics.arcade.velocityFromAngle(this.angle + 90, 2);
+            this.body.velocity.x -= tempVelocity.x;
+            this.body.velocity.y -= tempVelocity.y;
         }
     }
 
-
+    /**
+     * Grow by the size of the sprite eaten
+     * @param eaten
+     */
+    growBy (eaten) {
+        this.size = this.size + eaten;
+        this.scale.setTo(this.size, this.size);
+    }
 }
 
 

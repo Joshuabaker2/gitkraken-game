@@ -10,13 +10,12 @@ class WindowManager extends Phaser.ScaleManager {
     }
 
     manageWindow() {
-        this.game.input.maxPointers = 1;
+        // this.game.input.maxPointers = 1;
         this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.game.scale.pageAlignHorizontally = true;
         this.game.scale.pageAlignVertically = true;
         this.game.scale.setResizeCallback(this.adjust, this);
-        this.adjust();
-
+        // this.adjust();
     }
 
     adjust() {
