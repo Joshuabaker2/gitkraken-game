@@ -45,13 +45,8 @@ class Fish extends Collidable {
         }
 
         if (this.goingLeft === true) {
-            console.log('going left');
-
-
             this.body.acceleration.x -= 1;
         } else {
-            console.log('going right');
-
             this.body.acceleration.x += 1;
         }
 
