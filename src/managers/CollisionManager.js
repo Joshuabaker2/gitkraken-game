@@ -10,12 +10,10 @@ class CollisionManager extends Phaser.Physics.Arcade {
     }
 
     setPlayer (player) {
-        console.log("player added");
         this.player = player;
     }
 
     addCollidable (collidable) {
-        console.log(collidable);
         this.collidables.push(collidable);
     }
 

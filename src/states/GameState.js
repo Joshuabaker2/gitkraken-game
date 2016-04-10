@@ -2,29 +2,55 @@ import Player from 'objects/Player';
 import WindowManager from 'managers/WindowManager';
 import CollisionManager from 'managers/CollisionManager';
 import Food from 'objects/Food';
+import Fish from 'objects/Fish';
 
 class GameState extends Phaser.State {
 
 	preload() {
 		this.game.stage.backgroundColor = "#f5f5f5";
-		this.game.load.image('kraken', './assets/kraken.png');
-		this.game.load.image('bubble', './assets/bubble.png');
-		new WindowManager(this.game, "100%", "100%");
-		this.collisionManager = new CollisionManager(this.game);
+		this.loadAssets();
+		this.windowManager = new WindowManager(this.game, "100%", "100%");
 	}
 
 	create() {
-		let center = { x: this.game.world.centerX, y: this.game.world.centerY };
-		this.player = new Player(this.game, center.x, center.y);
-		this.food = new Food(this.game, 0.005);
-		this.game.add.existing(this.food);
-		this.game.add.existing(this.player);
-		this.collisionManager.setPlayer(this.player);
-		this.collisionManager.addCollidable(this.food);
+		this.collisionManager = new CollisionManager(this.game);
+		this.generatePlayer();
+		this.generateFood();
+		this.generateFish();
 	}
 
 	update() {
 		this.collisionManager.update();
+		this.windowManager.update();
+	}
+
+	loadAssets() {
+		this.game.load.image('kraken', './assets/kraken.png');
+		this.game.load.image('bubble', './assets/bubble.png');
+		this.game.load.image('fish', './assets/fish.png');
+	}
+
+	generateFood() {
+		for (let i = 0; i < 1; i++ ) {
+			const food = new Food(this.game);
+			this.game.add.existing(food);
+			this.collisionManager.addCollidable(food);
+			this.windowManager.addSprite(food);
+		}
+	}
+
+	generateFish() {
+		const fish = new Fish(this.game);
+		this.game.add.existing(fish);
+		this.collisionManager.addCollidable(fish);
+		this.windowManager.addSprite(fish);
+	}
+
+	generatePlayer() {
+		this.player = new Player(this.game, this.game.world.centerX, this.game.world.centerY);
+		this.game.add.existing(this.player);
+		this.collisionManager.setPlayer(this.player);
+		this.windowManager.addSprite(this.player);
 	}
 
 }
