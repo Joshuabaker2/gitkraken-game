@@ -1,12 +1,14 @@
 /**
  * Created by josh on 2016-04-09.
  */
+import ScoreManager from 'managers/ScoreManager';
 
 class CollisionManager extends Phaser.Physics.Arcade {
 
     constructor(game) {
         super(game);
         this.collidables = [];
+        this.scoreManager = new ScoreManager(game);
     }
 
     setPlayer (player) {
@@ -28,6 +30,7 @@ class CollisionManager extends Phaser.Physics.Arcade {
             console.log("Game over");
             return;
         }
+        this.scoreManager.addScore(collidable.size);
         player.growBy(collidable.size);
         collidable.respawn();
     }
