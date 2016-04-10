@@ -40,10 +40,12 @@ class GameState extends Phaser.State {
 	}
 
 	generateFish() {
-		const fish = new Fish(this.game);
-		this.game.add.existing(fish);
-		this.collisionManager.addCollidable(fish);
-		this.windowManager.addSprite(fish);
+		for (let i = 0; i < 5; i++ ) {
+			const fish = new Fish(this.game);
+			this.game.add.existing(fish);
+			this.collisionManager.addCollidable(fish);
+			this.windowManager.addSprite(fish);
+		}
 	}
 
 	generatePlayer() {
