@@ -13,7 +13,7 @@ class Fish extends Collidable {
         
         // this.maxAcceleration = Math.random() * (150 - 74) + 74;
         // this.maxVelocity = Math.random() * (80 - 40) + 40;
-        this.goingLeft = x === game.world.width;
+        this.goingLeft = x !== 0;
         this.respawning = false;
         this.body.velocity.x = this.getVelocity();
 
@@ -68,7 +68,7 @@ class Fish extends Collidable {
         const xSpawnChoices = [this.game.world.x, this.game.world.width];
         x = xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
 
-        this.goingLeft = x === this.game.world.width;
+        this.goingLeft = x !== 0;
         this.visible = false;
 
         setTimeout(() => {

@@ -9,6 +9,9 @@ class CollisionManager extends Phaser.Physics.Arcade {
         super(game);
         this.collidables = [];
         this.scoreManager = new ScoreManager(game);
+        this.gameOver = false;
+        this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
     }
 
     setPlayer (player) {
@@ -20,6 +23,9 @@ class CollisionManager extends Phaser.Physics.Arcade {
     }
 
     update() {
+        if (this.gameOver && this.spaceKey.isDown) {
+            this.game.state.restart();
+        }
         this.collidables.forEach((collidable) => {
             this.game.physics.arcade.collide(this.player, collidable, this.playerCollision, null, this);
         });
@@ -27,12 +33,15 @@ class CollisionManager extends Phaser.Physics.Arcade {
     
     playerCollision(player, collidable) {
         if (player.size < collidable.size) {
-            console.log("Game over");
+            player.visible = false;
+            player.body = false;
+            this.scoreManager.gameOver();
+            this.gameOver = true;
             return;
         }
         this.scoreManager.addScore(collidable.size);
         player.growBy(collidable.size);
-        collidable.respawn();
+        collidable.respawn(null, null, 1500, player.size, player.size/2);
     }
 
 }

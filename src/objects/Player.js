@@ -24,6 +24,8 @@ class Player extends Phaser.Sprite {
     }
 
     handleMomentum () {
+        if (!this.body) return;
+
         if (this.body.velocity.x > 0) {
             this.body.velocity.x -= 4;
         } else if (this.body.velocity.x < 0) {
@@ -40,6 +42,8 @@ class Player extends Phaser.Sprite {
     }
 
     handleKeyboard () {
+        if (!this.body) return;
+
         if (this.cursors.left.isDown) {
             this.body.angularVelocity = this.body.angularVelocity > -200 ? this.body.angularVelocity - 8 : this.body.angularVelocity;
         } else if (this.cursors.right.isDown) {
@@ -61,11 +65,11 @@ class Player extends Phaser.Sprite {
     }
 
     /**
-     * Grow by a quarter the size of the sprite eaten
+     * Grow by a fraction of the size of the sprite eaten
      * @param eaten
      */
     growBy (eaten) {
-        this.size = this.size + eaten/4;
+        this.size = this.size + eaten/10;
         this.scale.setTo(this.size, this.size);
     }
 }

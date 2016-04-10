@@ -18,12 +18,10 @@ class Fish extends Phaser.Sprite {
 
     respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000, max, min) {
         const savedBody = this.body;
-        const newSize = this.size + this.sizeModifier(max, min);
         this.body = null;
         this.visible = false;
 
         setTimeout(() => {
-            this.scale.setTo(newSize, newSize);
             this.body = savedBody;
             this.body.x = x;
             this.body.y = y;
