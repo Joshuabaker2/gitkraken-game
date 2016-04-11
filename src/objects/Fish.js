@@ -8,7 +8,7 @@ class Fish extends Collidable {
 
     constructor(game) {
         const x = getSpawnLocation(game);
-        super(game, 'roundfish', 0.0225, 30, x, null);
+        super(game, 'roundfish', 0.0225, 30, x, undefined);
         
         this.goingLeft = x !== 0;
         this.respawning = false;
@@ -38,20 +38,20 @@ class Fish extends Collidable {
 
         const savedBody = this.body;
         const newSize = this.size + this.sizeModifier(max, min);
+        this.scale.setTo(newSize, newSize);
 
         x = getSpawnLocation(this.game);
-
         this.goingLeft = x !== 0;
 
+        savedBody.x = x;
+        savedBody.y = y;
+        savedBody.acceleration.x = 0;
+        savedBody.acceleration.y = 0;
+        savedBody.velocity.x = this.getVelocity();
+        savedBody.velocity.y = 0;
+
         setTimeout(() => {
-            this.scale.setTo(newSize, newSize);
             this.body = savedBody;
-            this.body.x = x;
-            this.body.y = y;
-            this.body.acceleration.x = 0;
-            this.body.acceleration.y = 0;
-            this.body.velocity.x = this.getVelocity();
-            this.body.velocity.y = 0;
             this.visible = true;
             this.respawning = false;
         }, timeout);

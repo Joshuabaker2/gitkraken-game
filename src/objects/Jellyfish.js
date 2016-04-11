@@ -8,7 +8,7 @@ class Jellyfish extends Collidable {
 
     constructor(game) {
         const y = getSpawnLocation(game);
-        super(game, 'jellyfish', 0.0225, 30, null, y);
+        super(game, 'jellyfish', 0.0225, 30, undefined, y);
         
         this.goingUp = y !== 0;
         this.respawning = false;
@@ -31,27 +31,31 @@ class Jellyfish extends Collidable {
     }
 
 
-    respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000, max, min) {
+    respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 350, max, min) {
         if (this.respawning) return;
         this.respawning = true;
         this.visible = false;
 
         const savedBody = this.body;
-        const newSize = this.size + this.sizeModifier(max, min);
+
 
         y = getSpawnLocation(this.game);
 
         this.goingUp = y !== 0;
+        const newSize = this.size + this.sizeModifier(max, min);
+        this.scale.setTo(newSize, newSize);
+
+        savedBody.x = x;
+        savedBody.y = y;
+        savedBody.acceleration.x = 0;
+        savedBody.acceleration.y = 0;
+        savedBody.velocity.y = 0;
+        savedBody.velocity.y = this.getVelocity();
+
+
 
         setTimeout(() => {
-            this.scale.setTo(newSize, newSize);
             this.body = savedBody;
-            this.body.x = x;
-            this.body.y = y;
-            this.body.acceleration.x = 0;
-            this.body.acceleration.y = 0;
-            this.body.velocity.y = 0;
-            this.body.velocity.y = this.getVelocity();
             this.visible = true;
             this.respawning = false;
         }, timeout);
