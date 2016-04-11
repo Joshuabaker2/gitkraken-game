@@ -2,25 +2,48 @@
  * Created by josh on 2016-04-09.
  */
 
-class ScoreManager {
+
+class ScoreManager  {
 
     constructor(game) {
         this.text = game.add.text(game.world.x + 25, game.world.y + 25, "Score: 0", {font: "20px Arial", fill: "#000000"});
         this.game = game;
         this.score = 0;
+        this.isGameOver = false;
+        this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    }
+    
+    update () {
+        if (this.isGameOver && this.spaceKey.isDown) {
+            this.game.state.restart();
+        }
     }
 
     addScore(score) {
         this.score += Math.round(score * 1000);
         this.text.setText(`Score: ${this.score}`);
+        
+        this.checkIfWon();
+    }
+    
+    checkIfWon() {
+        if (this.score > 3500) {
+            this.isGameOver = true;
+            this.game.add.text(this.game.world.centerX - 200,
+                this.game.world.centerY - 200,
+                `Congratulations! You win! \n Score: ${this.score}`,
+                { align: "center",
+                    font: "60px Arial",
+                    fill: "#000000"});
+        }
     }
 
     gameOver() {
+        this.isGameOver = true;
         this.game.add.text(this.game.world.centerX - 200,
             this.game.world.centerY - 200,
             `Game Over \n Score: ${this.score}`,
             { align: "center",
-                // boundsAlignV: "middle",
                 font: "60px Arial",
                 fill: "#000000"});
 
@@ -28,7 +51,6 @@ class ScoreManager {
             this.game.world.centerY,
             `Press Spacebar to Restart`,
             { align: "center",
-                // boundsAlignV: "middle",
                 font: "40px Arial",
                 fill: "#000000"});
     }

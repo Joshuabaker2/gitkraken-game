@@ -34,13 +34,14 @@ class Jellyfish extends Collidable {
     respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000, max, min) {
         if (this.respawning) return;
         this.respawning = true;
+        this.visible = false;
+
         const savedBody = this.body;
         const newSize = this.size + this.sizeModifier(max, min);
 
         y = getSpawnLocation(this.game);
 
         this.goingUp = y !== 0;
-        this.visible = false;
 
         setTimeout(() => {
             this.scale.setTo(newSize, newSize);

@@ -7,8 +7,7 @@ import Collidable from 'objects/Collidable';
 class Fish extends Collidable {
 
     constructor(game) {
-        const xSpawnChoices = [game.world.x, game.world.width];
-        const x = xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
+        const x = getSpawnLocation(game);
         super(game, 'roundfish', 0.0225, 30, x, null);
         
         this.goingLeft = x !== 0;
@@ -35,14 +34,14 @@ class Fish extends Collidable {
     respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000, max, min) {
         if (this.respawning) return;
         this.respawning = true;
+        this.visible = false;
+
         const savedBody = this.body;
         const newSize = this.size + this.sizeModifier(max, min);
 
-        const xSpawnChoices = [this.game.world.x, this.game.world.width];
-        x = xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
+        x = getSpawnLocation(this.game);
 
         this.goingLeft = x !== 0;
-        this.visible = false;
 
         setTimeout(() => {
             this.scale.setTo(newSize, newSize);
@@ -64,6 +63,11 @@ class Fish extends Collidable {
 
 
 }
+
+const getSpawnLocation = (game) => {
+    const xSpawnChoices = [0, game.world.width];
+    return xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
+};
 
 
 export default Fish;
