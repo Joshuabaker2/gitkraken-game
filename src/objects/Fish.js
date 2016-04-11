@@ -24,10 +24,11 @@ class Fish extends Collidable {
     }
     
     chooseDirection() {
-        if (this.goingLeft) {
-            this.scale.x = -this.size;
-        } else {
+        if (!this.body) return;
+        if (this.body.velocity.x > 0) {
             this.scale.x = this.size;
+        } else {
+            this.scale.x = -this.size;
         }
     }
 
@@ -38,8 +39,11 @@ class Fish extends Collidable {
         this.visible = false;
 
         const savedBody = this.body;
-        const newSize = this.size + this.sizeModifier(max, min);
-        this.scale.setTo(newSize, newSize);
+
+        this.sizeModifier(max, min, (modifiedSize) => {
+            this.size += modifiedSize;
+            this.scale.setTo(this.size, this.size);
+        });
 
         x = getSpawnLocation(this.game, this.edge);
         this.goingLeft = x !== this.edge;

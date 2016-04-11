@@ -15,7 +15,6 @@ class Jellyfish extends Collidable {
         this.goingUp = y !== this.edge;
         this.respawning = false;
         this.body.velocity.y = this.getVelocity();
-
     }
 
     update () {
@@ -24,10 +23,11 @@ class Jellyfish extends Collidable {
     }
     
     chooseDirection() {
-        if (this.goingUp) {
-            this.scale.y = this.size;
-        } else {
+        if (!this.body) return;
+        if (this.body.velocity.y > 0) {
             this.scale.y = -this.size;
+        } else {
+            this.scale.y = this.size;
         }
     }
 
@@ -42,8 +42,11 @@ class Jellyfish extends Collidable {
         y = getSpawnLocation(this.game, this.edge);
 
         this.goingUp = y !== this.edge;
-        const newSize = this.size + this.sizeModifier(max, min);
-        this.scale.setTo(newSize, newSize);
+        
+        this.sizeModifier(max, min, (modifiedSize) => {
+            this.size += modifiedSize;
+            this.scale.setTo(this.size, this.size);
+        });
 
         savedBody.acceleration.x = 0;
         savedBody.acceleration.y = 0;

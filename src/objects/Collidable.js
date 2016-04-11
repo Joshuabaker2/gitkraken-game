@@ -2,16 +2,19 @@
  * Created by josh on 2016-04-07.
  */
 
-class Fish extends Phaser.Sprite {
+class Collidable extends Phaser.Sprite {
 
     constructor(game, sprite, size, maxSizeModifier, x, y) {
         super(game, x || game.world.randomX, y || game.world.randomY, sprite);
         this.maxSizeModifier = maxSizeModifier;
-        this.size = size + this.sizeModifier();
+
+        this.sizeModifier(undefined, undefined, (modifiedSize) => {
+            this.size = modifiedSize + size;
+            this.scale.setTo(this.size, this.size);
+        });
 
         this.respawning = false;
         
-        this.scale.setTo(this.size, this.size);
         this.anchor.setTo(0.5,0.5);
         game.physics.enable(this, Phaser.Physics.ARCADE);
     }
@@ -30,8 +33,6 @@ class Fish extends Phaser.Sprite {
         savedBody.y = y;
         savedBody.acceleration.x = 0;
         savedBody.acceleration.y = 0;
-        savedBody.velocity.x = 0;
-        savedBody.velocity.y = 0;
 
         setTimeout(() => {
             this.body = savedBody;
@@ -40,11 +41,11 @@ class Fish extends Phaser.Sprite {
         }, timeout);
     }
 
-    sizeModifier(max = this.maxSizeModifier, min = 0) {
-        return Math.floor(Math.random() * (max - min) + min)/1000;
+    sizeModifier(max = this.maxSizeModifier, min = 0, cb) {
+        cb(Math.floor(Math.random() * (max - min) + min)/1000);
     }
 
 }
 
 
-export default Fish;
+export default Collidable;
