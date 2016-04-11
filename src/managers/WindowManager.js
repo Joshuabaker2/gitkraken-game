@@ -9,6 +9,7 @@ class WindowManager extends Phaser.ScaleManager {
         this.manageWindow();
         this.sprites = [];
         this.respawnSprites = [];
+        this.EDGE = 100;
     }
 
     manageWindow() {
@@ -41,13 +42,13 @@ class WindowManager extends Phaser.ScaleManager {
     respawnScreenWrap () {
         this.respawnSprites.forEach((sprite) => {
             if (!sprite.body) return;
-            if (sprite.x < 0 || sprite.x > this.game.width) {
+            if (sprite.x < 0 - this.EDGE || sprite.x > this.game.width + this.EDGE) {
                 sprite.respawn(0, undefined, 0, 1, 0);
             }
 
 
-            if (sprite.y < 0 || sprite.y > this.game.height) {
-                sprite.respawn(undefined, undefined, 0, 1, 0);
+            if (sprite.y < 0 - this.EDGE || sprite.y > this.game.height + this.EDGE) {
+                sprite.respawn(0, undefined, 0, 1, 0);
             }
         });
     }

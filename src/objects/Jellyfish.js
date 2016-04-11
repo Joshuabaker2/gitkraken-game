@@ -7,10 +7,12 @@ import Collidable from 'objects/Collidable';
 class Jellyfish extends Collidable {
 
     constructor(game) {
-        const y = getSpawnLocation(game);
+        const edge = 0;
+        const y = getSpawnLocation(game, edge);
         super(game, 'jellyfish', 0.0225, 30, undefined, y);
-        
-        this.goingUp = y !== 0;
+
+        this.edge = edge;
+        this.goingUp = y !== this.edge;
         this.respawning = false;
         this.body.velocity.y = this.getVelocity();
 
@@ -22,11 +24,10 @@ class Jellyfish extends Collidable {
     }
     
     chooseDirection() {
-        if (!this.body) return;
-        if (this.body.velocity.y > 0) {
-            this.scale.y = -this.size;
-        } else {
+        if (this.goingUp) {
             this.scale.y = this.size;
+        } else {
+            this.scale.y = -this.size;
         }
     }
 
@@ -38,29 +39,25 @@ class Jellyfish extends Collidable {
 
         const savedBody = this.body;
 
+        y = getSpawnLocation(this.game, this.edge);
 
-        y = getSpawnLocation(this.game);
-
-        this.goingUp = y !== 0;
+        this.goingUp = y !== this.edge;
         const newSize = this.size + this.sizeModifier(max, min);
         this.scale.setTo(newSize, newSize);
 
-        savedBody.x = x;
-        savedBody.y = y;
         savedBody.acceleration.x = 0;
         savedBody.acceleration.y = 0;
         savedBody.velocity.y = 0;
         savedBody.velocity.y = this.getVelocity();
 
-
-
         setTimeout(() => {
+            savedBody.x = x;
+            savedBody.y = y;
             this.body = savedBody;
             this.visible = true;
             this.respawning = false;
         }, timeout);
     }
-
 
 
     getVelocity () {
@@ -70,8 +67,8 @@ class Jellyfish extends Collidable {
 
 }
 
-const getSpawnLocation = (game) => {
-    const ySpawnChoices = [0, game.world.height];
+const getSpawnLocation = (game, edge) => {
+    const ySpawnChoices = [edge, game.world.height - edge];
     return ySpawnChoices[Math.floor(Math.random()*ySpawnChoices.length)];
 };
 

@@ -16,7 +16,7 @@ class GameState extends Phaser.State {
 
 	create() {
 		const background = this.game.add.sprite(0,0, 'background');
-		background.scale.setTo(0.5, 0.5);
+		background.scale.setTo(0.7, 0.7);
 
 		this.collisionManager = new CollisionManager(this.game);
 		this.generateFood();

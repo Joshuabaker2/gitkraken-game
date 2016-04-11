@@ -7,10 +7,12 @@ import Collidable from 'objects/Collidable';
 class Fish extends Collidable {
 
     constructor(game) {
-        const x = getSpawnLocation(game);
+        const edge = 0;
+        const x = getSpawnLocation(game, edge);
         super(game, 'roundfish', 0.0225, 30, x, undefined);
-        
-        this.goingLeft = x !== 0;
+
+        this.edge = edge;
+        this.goingLeft = x !== this.edge;
         this.respawning = false;
         this.body.velocity.x = this.getVelocity();
 
@@ -22,11 +24,10 @@ class Fish extends Collidable {
     }
     
     chooseDirection() {
-        if (!this.body) return;
-        if (this.body.velocity.x > 0) {
-            this.scale.x = this.size;
-        } else {
+        if (this.goingLeft) {
             this.scale.x = -this.size;
+        } else {
+            this.scale.x = this.size;
         }
     }
 
@@ -40,18 +41,18 @@ class Fish extends Collidable {
         const newSize = this.size + this.sizeModifier(max, min);
         this.scale.setTo(newSize, newSize);
 
-        x = getSpawnLocation(this.game);
-        this.goingLeft = x !== 0;
+        x = getSpawnLocation(this.game, this.edge);
+        this.goingLeft = x !== this.edge;
 
-        savedBody.x = x;
-        savedBody.y = y;
         savedBody.acceleration.x = 0;
         savedBody.acceleration.y = 0;
         savedBody.velocity.x = this.getVelocity();
         savedBody.velocity.y = 0;
-
+        
         setTimeout(() => {
             this.body = savedBody;
+            this.body.x = x;
+            this.body.y = y;
             this.visible = true;
             this.respawning = false;
         }, timeout);
@@ -64,8 +65,8 @@ class Fish extends Collidable {
 
 }
 
-const getSpawnLocation = (game) => {
-    const xSpawnChoices = [0, game.world.width];
+const getSpawnLocation = (game, edge) => {
+    const xSpawnChoices = [edge, game.world.width - edge];
     return xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
 };
 
