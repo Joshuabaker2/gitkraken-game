@@ -44,6 +44,11 @@ class WindowManager extends Phaser.ScaleManager {
             if (sprite.x < 0 || sprite.x > this.game.width) {
                 sprite.respawn(0, null, 200, 1, 0);
             }
+
+
+            if (sprite.y < 0 || sprite.y > this.game.height) {
+                sprite.respawn(null, null, 200, 1, 0);
+            }
         });
     }
 
