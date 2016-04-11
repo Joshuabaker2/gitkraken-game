@@ -8,12 +8,16 @@ import Jellyfish from 'objects/Jellyfish';
 class GameState extends Phaser.State {
 
 	preload() {
-		this.game.stage.backgroundColor = "#f5f5f5";
 		this.loadAssets();
+		// this.game.stage.backgroundColor = "#f5f5f5";
+
 		this.windowManager = new WindowManager(this.game, "100%", "100%");
 	}
 
 	create() {
+		const background = this.game.add.sprite(0,0, 'background');
+		background.scale.setTo(0.5, 0.5);
+
 		this.collisionManager = new CollisionManager(this.game);
 		this.generateFood();
 		this.generateFish();
@@ -31,6 +35,7 @@ class GameState extends Phaser.State {
 		this.game.load.image('bubble', './assets/bubble.png');
 		this.game.load.image('roundfish', './assets/roundfish.png');
 		this.game.load.image('jellyfish', './assets/talljelly.png');
+		this.game.load.image('background', './assets/background.png');
 	}
 
 	generateFood() {

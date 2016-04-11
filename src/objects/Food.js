@@ -7,7 +7,14 @@ import Collidable from 'objects/Collidable';
 class Food extends Collidable {
 
     constructor(game) {
-        super(game, 'bubble', 0.005, 0);
+        const location = getSpawnLocation(game);
+        super(game, 'bubble', 0.005, 0, location.x, location.y);
+
+        this.movingHorizontally = Math.random() > 0.5;
+        this.movingVertically = Math.random() > 0.5;
+
+        this.goingLeft = location.x !== 0;
+        this.goingUp = location.y !== 0;
     }
 
     update () {
@@ -17,11 +24,29 @@ class Food extends Collidable {
 
     floatAround () {
         if (!this.body) return;
-        this.body.acceleration.x = Math.floor(Math.random() * (101) - 50);
-        this.body.acceleration.y = Math.floor(Math.random() * (101) - 50);
+
+        if (this.movingHorizontally) {
+            this.body.velocity.x = this.getVelocity(this.goingLeft);
+        }
+
+        if (this.movingVertically) {
+            this.body.velocity.y = this.getVelocity(this.goingUp);
+        }
+    }
+
+    getVelocity (condition) {
+        return condition ? Math.floor(Math.random() * (100) - 150) : Math.floor(Math.random() * (100) + 50);
     }
 
 }
 
+const getSpawnLocation = (game) => {
+    const xSpawnChoices = [0, game.world.width];
+    const x = xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
+    const ySpawnChoices = [0, game.world.height];
+    const y = ySpawnChoices[Math.floor(Math.random()*ySpawnChoices.length)];
+
+    return {x: x, y: y};
+};
 
 export default Food;

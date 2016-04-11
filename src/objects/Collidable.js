@@ -9,6 +9,8 @@ class Fish extends Phaser.Sprite {
         this.maxSizeModifier = maxSizeModifier;
         this.size = size + this.sizeModifier();
 
+        this.respawning = false;
+        
         this.scale.setTo(this.size, this.size);
         this.anchor.setTo(0.5,0.5);
         game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -16,20 +18,25 @@ class Fish extends Phaser.Sprite {
 
 
 
-    respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000, max, min) {
+    respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000) {
+        if (this.respawning) return;
+        this.respawning = true;
+        
         const savedBody = this.body;
         this.body = null;
         this.visible = false;
 
+        savedBody.x = x;
+        savedBody.y = y;
+        savedBody.acceleration.x = 0;
+        savedBody.acceleration.y = 0;
+        savedBody.velocity.x = 0;
+        savedBody.velocity.y = 0;
+
         setTimeout(() => {
             this.body = savedBody;
-            this.body.x = x;
-            this.body.y = y;
-            this.body.acceleration.x = 0;
-            this.body.acceleration.y = 0;
-            this.body.velocity.x = 0;
-            this.body.velocity.y = 0;
             this.visible = true;
+            this.respawning = false;
         }, timeout);
     }
 

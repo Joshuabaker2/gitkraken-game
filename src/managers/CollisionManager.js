@@ -35,7 +35,7 @@ class CollisionManager extends Phaser.Physics.Arcade {
         }
         this.scoreManager.addScore(collidable.size);
         player.growBy(collidable.size);
-        collidable.respawn(undefined, undefined, 1500, player.size, player.size/2);
+        collidable.respawn(undefined, undefined, 1500, player.size * 1000, player.size * 1000);
     }
 
 }
