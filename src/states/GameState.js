@@ -1,9 +1,12 @@
 import Player from 'objects/Player';
 import WindowManager from 'managers/WindowManager';
 import CollisionManager from 'managers/CollisionManager';
+import CountdownManager from 'managers/CountdownManager';
+
 import Food from 'objects/Food';
 import Fish from 'objects/Fish';
 import Jellyfish from 'objects/Jellyfish';
+
 
 class GameState extends Phaser.State {
 
@@ -68,7 +71,13 @@ class GameState extends Phaser.State {
 	generatePlayer() {
 		this.player = new Player(this.game, this.game.world.centerX, this.game.world.centerY);
 		this.game.add.existing(this.player);
-		this.collisionManager.setPlayer(this.player);
+		
+		// Gives the player 4 seconds to get going
+		this.countdownManager = new CountdownManager(this.game);
+		this.countdownManager.start();
+		setTimeout(() => {
+			this.collisionManager.setPlayer(this.player);	
+		}, 4000);
 		this.windowManager.addSprite(this.player);
 	}
 

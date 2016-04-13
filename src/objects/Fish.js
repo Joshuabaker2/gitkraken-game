@@ -16,6 +16,9 @@ class Fish extends Collidable {
         this.respawning = false;
         this.body.velocity.x = this.getVelocity();
 
+        // set collision box sizes to be smaller (first doing *= 0.7 in collidable)
+        this.body.width *= 0.9;
+        this.body.height *= 0.9;
     }
 
     update () {
@@ -33,7 +36,7 @@ class Fish extends Collidable {
     }
 
 
-    respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 5000, max, min) {
+    respawn (x, y = this.game.world.randomY, timeout = 5000, max, min) {
         if (this.respawning) return;
         this.respawning = true;
         this.visible = false;
@@ -45,21 +48,23 @@ class Fish extends Collidable {
             this.scale.setTo(this.size, this.size);
         });
 
-        x = getSpawnLocation(this.game, this.edge);
-        this.goingLeft = x !== this.edge;
+        getSpawnLocation(this.game, this.edge, (spawnLocation) => {
+            this.goingLeft = spawnLocation !== this.edge;
+            savedBody.acceleration.x = 0;
+            savedBody.acceleration.y = 0;
+            savedBody.x = spawnLocation;
+            savedBody.y = y;
+            savedBody.velocity.x = 0;
+            savedBody.velocity.y = 0;
 
-        savedBody.acceleration.x = 0;
-        savedBody.acceleration.y = 0;
-        savedBody.velocity.x = this.getVelocity();
-        savedBody.velocity.y = 0;
-        
-        setTimeout(() => {
-            this.body = savedBody;
-            this.body.x = x;
-            this.body.y = y;
-            this.visible = true;
-            this.respawning = false;
-        }, timeout);
+            setTimeout(() => {
+                this.body = savedBody;
+                this.body.velocity.x = this.getVelocity();
+                this.visible = true;
+                this.respawning = false;
+            }, timeout);
+        });
+
     }
 
     getVelocity () {
@@ -69,9 +74,13 @@ class Fish extends Collidable {
 
 }
 
-const getSpawnLocation = (game, edge) => {
+const getSpawnLocation = (game, edge, cb) => {
     const xSpawnChoices = [edge, game.world.width - edge];
-    return xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
+    const xSpawnLocation = xSpawnChoices[Math.floor(Math.random()*xSpawnChoices.length)];
+    if (cb) {
+        cb(xSpawnLocation);
+    }
+    return xSpawnLocation;
 };
 
 

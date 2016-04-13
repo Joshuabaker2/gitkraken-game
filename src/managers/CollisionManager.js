@@ -22,11 +22,16 @@ class CollisionManager extends Phaser.Physics.Arcade {
     update() {
         this.scoreManager.update();
         this.collidables.forEach((collidable) => {
-            this.game.physics.arcade.collide(this.player, collidable, this.playerCollision, null, this);
+            this.game.physics.arcade.collide(this.player, collidable, this.playerCollision, this.processCollision, this);
         });
+    }
+
+    processCollision(player, collidable) {
+        return !collidable.respawning;
     }
     
     playerCollision(player, collidable) {
+        if (collidable.respawning) return;
         if (player.size < collidable.size) {
             player.visible = false;
             player.body = false;
@@ -35,7 +40,7 @@ class CollisionManager extends Phaser.Physics.Arcade {
         }
         this.scoreManager.addScore(collidable.size);
         player.growBy(collidable.size);
-        collidable.respawn(undefined, undefined, 1500, player.size * 1000, player.size * 1000);
+        collidable.respawn(undefined, undefined, 2000, player.size * 1000, player.size * 1000);
     }
 
 }

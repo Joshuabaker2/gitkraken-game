@@ -43,16 +43,23 @@ class ScoreManager  {
         this.game.add.text(this.game.world.centerX - 200,
             this.game.world.centerY - 200,
             `Game Over \n Score: ${this.score}`,
-            { align: "center",
+            {   align: "center",
                 font: "60px Arial",
                 fill: "#ffffff"});
 
         this.game.add.text(this.game.world.centerX - 250,
             this.game.world.centerY,
             `Press Spacebar to Restart`,
-            { align: "center",
+            {   align: "center",
                 font: "40px Arial",
                 fill: "#ffffff"});
+
+        this.game.add.text(this.game.world.centerX - 400,
+            this.game.world.centerY + 200,
+            "(Use arrow keys to move, try to eat things smaller than you to get as big as possible)",
+            {   align: "center",
+                font: "20px Arial",
+                fill: "#ffffff" });
     }
 
 }

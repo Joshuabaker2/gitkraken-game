@@ -17,6 +17,10 @@ class Collidable extends Phaser.Sprite {
         
         this.anchor.setTo(0.5,0.5);
         game.physics.enable(this, Phaser.Physics.ARCADE);
+
+        // set collision box sizes to be smaller
+        this.body.width *= 0.8;
+        this.body.height *= 0.8;
     }
 
 

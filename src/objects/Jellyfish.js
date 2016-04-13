@@ -32,34 +32,34 @@ class Jellyfish extends Collidable {
     }
 
 
-    respawn (x = this.game.world.randomX, y = this.game.world.randomY, timeout = 350, max, min) {
+    respawn (x = this.game.world.randomX, y, timeout = 350, max, min) {
         if (this.respawning) return;
         this.respawning = true;
         this.visible = false;
 
         const savedBody = this.body;
 
-        y = getSpawnLocation(this.game, this.edge);
+        getSpawnLocation(this.game, this.edge, (spawnLocation) => {
+            this.goingUp = spawnLocation !== this.edge;
+            this.sizeModifier(max, min, (modifiedSize) => {
+                this.size += modifiedSize;
+                this.scale.setTo(this.size, this.size);
+            });
 
-        this.goingUp = y !== this.edge;
-        
-        this.sizeModifier(max, min, (modifiedSize) => {
-            this.size += modifiedSize;
-            this.scale.setTo(this.size, this.size);
-        });
-
-        savedBody.acceleration.x = 0;
-        savedBody.acceleration.y = 0;
-        savedBody.velocity.y = 0;
-        savedBody.velocity.y = this.getVelocity();
-
-        setTimeout(() => {
+            savedBody.acceleration.x = 0;
+            savedBody.acceleration.y = 0;
             savedBody.x = x;
-            savedBody.y = y;
-            this.body = savedBody;
-            this.visible = true;
-            this.respawning = false;
-        }, timeout);
+            savedBody.y = spawnLocation;
+            savedBody.velocity.x = 0;
+            savedBody.velocity.y = 0;
+
+            setTimeout(() => {
+                this.body.velocity.y = this.getVelocity();
+                this.body = savedBody;
+                this.visible = true;
+                this.respawning = false;
+            }, timeout);
+        });
     }
 
 
@@ -70,9 +70,13 @@ class Jellyfish extends Collidable {
 
 }
 
-const getSpawnLocation = (game, edge) => {
+const getSpawnLocation = (game, edge, cb) => {
     const ySpawnChoices = [edge, game.world.height - edge];
-    return ySpawnChoices[Math.floor(Math.random()*ySpawnChoices.length)];
+    const ySpawnLocation = ySpawnChoices[Math.floor(Math.random()*ySpawnChoices.length)];
+    if (cb) {
+        cb(ySpawnLocation);
+    }
+    return ySpawnLocation;
 };
 
 
