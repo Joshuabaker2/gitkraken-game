@@ -32,14 +32,14 @@ class Jellyfish extends Collidable {
     }
 
 
-    respawn (x = this.game.world.randomX, y, timeout = 350, max, min) {
+    respawn (x, y, timeout = 350, max, min) {
         if (this.respawning) return;
         this.respawning = true;
         this.visible = false;
 
         const savedBody = this.body;
 
-        getSpawnLocation(this.game, this.edge, (spawnLocation) => {
+        getSpawnLocation(this.game, this.edge, (spawnLocation, spawn_x) => {
             this.goingUp = spawnLocation !== this.edge;
             this.sizeModifier(max, min, (modifiedSize) => {
                 this.size += modifiedSize;
@@ -48,7 +48,7 @@ class Jellyfish extends Collidable {
 
             savedBody.acceleration.x = 0;
             savedBody.acceleration.y = 0;
-            savedBody.x = x;
+            savedBody.x = spawn_x;
             savedBody.y = spawnLocation;
             savedBody.velocity.x = 0;
             savedBody.velocity.y = 0;
@@ -73,8 +73,9 @@ class Jellyfish extends Collidable {
 const getSpawnLocation = (game, edge, cb) => {
     const ySpawnChoices = [edge, game.world.height - edge];
     const ySpawnLocation = ySpawnChoices[Math.floor(Math.random()*ySpawnChoices.length)];
+    const x = this.game.world.randomX;
     if (cb) {
-        cb(ySpawnLocation);
+        cb(ySpawnLocation, x);
     }
     return ySpawnLocation;
 };
