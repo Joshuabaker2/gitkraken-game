@@ -73,7 +73,7 @@ class Jellyfish extends Collidable {
 const getSpawnLocation = (game, edge, cb) => {
     const ySpawnChoices = [edge, game.world.height - edge];
     const ySpawnLocation = ySpawnChoices[Math.floor(Math.random()*ySpawnChoices.length)];
-    const x = this.game.world.randomX;
+    const x = game.world.randomX;
     if (cb) {
         cb(ySpawnLocation, x);
     }
